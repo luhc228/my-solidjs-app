@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import { createSignal, createEffect } from 'solid-js';
+import { createSignal, createEffect, createMemo } from 'solid-js';
 
 type Props = {
   name: string;
@@ -9,11 +9,14 @@ type Props = {
 const Detail: Component<Props> = (props) => {
   const [count, setCount] = createSignal(0);
 
+  createEffect(() => console.log(`createEffect: ${count()}`));
+
+  // const totalCount = createMemo(() => props.appCount + count());
+  const totalCount = createMemo(() => props.appCount);
+
   function handleClick() {
     setCount(count() + 1)
   }
-
-  createEffect(() => console.log(`createEffect: ${count()}`));
 
   console.log('count: ', count());
   return (
@@ -23,6 +26,8 @@ const Detail: Component<Props> = (props) => {
       <div>AppCount {props.appCount}</div>
       <br />
       <div>DetailCount {count}</div>
+      <br />
+      <div>TotalCount {totalCount()}</div>
     </>
   )
 }
